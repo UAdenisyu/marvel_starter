@@ -1,5 +1,4 @@
 import { Component } from 'react';
-
 import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 import MarvelService from '../../services/MarvelService';
