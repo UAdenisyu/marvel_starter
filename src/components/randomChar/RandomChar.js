@@ -9,10 +9,8 @@ import ErrorMessage from '../errorMessage/errorMessage';
 
 
 class RandomChar extends Component {
-    constructor(props) {
-        super(props);
-        this.updateCharacter();
-    }
+    
+    timerId
 
     state = {
         char: {},
@@ -22,6 +20,10 @@ class RandomChar extends Component {
 
     marvelService = new MarvelService();
 
+    componentDidMount() {
+        this.updateRandomCharacter()
+    }
+
     onError = () => {
         this.setState({
             loading: false,
@@ -29,19 +31,24 @@ class RandomChar extends Component {
         });
     }
 
-    onCharLoaded = (char) => {
-        this.setState({char, loading: false});
-        console.log(char);
+    onCharLoading = () => {
+        this.setState({
+            error: false,
+            loading: true
+        }); 
     }
 
-    updateCharacter = () => {
+    onCharLoaded = (char) => {
+        this.setState({char, loading: false});
+    }
+
+    updateRandomCharacter = () => {
+        this.onCharLoading();
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
-        console.log(id);
         this.marvelService
             .getCharacter(id)
             .then(this.onCharLoaded)
             .catch(this.onError);
-
     }
 
     render() {
@@ -64,7 +71,10 @@ class RandomChar extends Component {
                     <p className="randomchar__title">
                         Or choose another one
                     </p>
-                    <button className="button button__main">
+                    <button 
+                        className="button button__main"
+                        onClick={this.updateRandomCharacter}
+                    >
                         <div className="inner">try it</div>
                     </button>
                     <img src={mjolnir} alt="mjolnir" className="randomchar__decoration"/>

@@ -12,7 +12,7 @@ const App = () => {
             <main>
                 <RandomChar/>
                 <div className="char__content">
-                    <CharList/>
+                    {/* <CharList/> */}
                     <CharInfo/>
                 </div>
                 <img className="bg-decoration" src={decoration} alt="vision"/>
