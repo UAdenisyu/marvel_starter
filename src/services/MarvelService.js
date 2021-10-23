@@ -4,6 +4,7 @@ export default class MarvelService {
     
     _apiBase = 'https://gateway.marvel.com:443/v1/public/characters';
     _apiKey = 'apikey=0480d6b0253eac4f592683cd2d95a272';
+    _fullCharCheck = false;
 
     getResource = async (url) => {
         let res = await fetch(url);
@@ -16,11 +17,15 @@ export default class MarvelService {
 
     getAllCharacters = async () => {
         const res = await this.getResource(`${this._apiBase}?limit=9&${this._apiKey}`);
-        return res.data.results.map(this._tranformCharacter)
+        return res.data.results.map(this._tranformCharacter);
     } 
 
     getCharacter = async (id) => {
         const res = await this.getResource(`${this._apiBase}/${id}?${this._apiKey}`);
+        if (this._fullCharCheck && (res.data.results[0].thumbnail.path === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available"
+            || res.data.results[0].description === "")){
+            return this.getCharacter(id+1);
+        }
         return this._tranformCharacter(res.data.results[0]);
     }
 
