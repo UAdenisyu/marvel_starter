@@ -9,6 +9,14 @@
     box-sizing: border-box;
 }
 
+body {
+    background-image: url("./../resources/img/background.jpg");
+    background-size: content;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+
 ul,
 li,
 dl {

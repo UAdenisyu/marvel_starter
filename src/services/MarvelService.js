@@ -4,40 +4,38 @@ export default class MarvelService {
     
     _apiBase = 'https://gateway.marvel.com:443/v1/public/characters';
     _apiKey = 'apikey=0480d6b0253eac4f592683cd2d95a272';
-    _fullCharCheck = false;
 
     getResource = async (url) => {
         let res = await fetch(url);
-
         if (!res.ok){
             throw new Error(`Could not fetch ${url}, status: ${res.status}`);
         }
         return await res.json();
     }
 
-    getAllCharacters = async () => {
-        const res = await this.getResource(`${this._apiBase}?limit=9&${this._apiKey}`);
-        return res.data.results.map(this._tranformCharacter);
+    getAllCharacters = async (amount = 9, offset = Math.random() * 500) => {
+        const res = await this.getResource(`${this._apiBase}?limit=${amount}&offset=${offset}&${this._apiKey}`);
+        return res.data.results.map(this._transformCharacter);
     } 
 
-    getCharacter = async (id) => {
+    getCharacter = async (id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000), repeatRequest = true) => {
         const res = await this.getResource(`${this._apiBase}/${id}?${this._apiKey}`);
-        if (this._fullCharCheck && (res.data.results[0].thumbnail.path === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available"
+        if (repeatRequest && (res.data.results[0].thumbnail.path === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available"
             || res.data.results[0].description === "")){
-            return this.getCharacter(id+1);
+            return this.getCharacter();
         }
-        return this._tranformCharacter(res.data.results[0]);
+        return this._transformCharacter(res.data.results[0]);
     }
 
-
-
-    _tranformCharacter = (char) => {
+    _transformCharacter = (char) => {
         return {  
+            id: char.id,
             name: char.name,
             description: char.description === "" ? 'No information about this character :((' : char.description.length < 150 ? char.description : char.description.slice(0, 149) + '...',
             thumbnail: char.thumbnail.path === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available" ? noImg : char.thumbnail.path + '.' + char.thumbnail.extension,
             homepage: char.urls[0].url,
-            wiki: char.urls[1].url}
-    }
+            wiki: char.urls[1].url,
+            comics: char.comics.items.map(item => item.name)
+        }
+    }   
 }
-

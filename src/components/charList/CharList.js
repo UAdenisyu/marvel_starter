@@ -1,16 +1,14 @@
 import { Component } from 'react';
 import './charList.scss';
-import abyss from '../../resources/img/abyss.jpg';
 import MarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/errorMessage';
 
 
-
 class CharList extends Component {
 
     state = {
-        charList: {},
+        charList: [],
         loading: true,
         error: false
     }
@@ -18,9 +16,7 @@ class CharList extends Component {
     marvelService = new MarvelService();
 
     componentDidMount() {
-        this.marvelService.getAllCharacters()
-            .then(this.onCharListLoaded)
-            .catch(this.onError)
+        this.updateCharList();
     }
 
     onError = () => {
@@ -42,25 +38,57 @@ class CharList extends Component {
             charList: charList,
             loading: false
         })
-        console.log(charList);
     }
 
+    updateCharList = () => {
+        this.onCharListLoading();
+        this.marvelService
+            .getAllCharacters()
+            .then(this.onCharListLoaded)
+            .catch(this.onError)
+    }
+
+    renderItems = (charList) => {
+        const items = charList.map((item) =>{
+            return (
+                <li
+                    className="char__item"
+                    key={item.id}
+                    onClick={() => this.props.selectChar(item.id)}>
+                        <img src={item.thumbnail} alt={item.name}/>
+                        <div className="char__name">{item.name}</div>
+                </li>
+            )
+        } );
+        return (
+            <ul className="char__grid">
+                {items}
+            </ul>
+        )
+    }
+
+
+
     render() {
+        const { charList, loading, error} = this.state;
+        const errorMessage = error ? <ErrorMessage/> : null;
+        const loadingMessage = loading ? <Spinner/> : null;
+
+        const content = !(loading || error) ? this.renderItems(charList) : null;
+
         return (
             <div className="char__list">
-                <ul className="char__grid">
-                    <li className="char__item">
-                        <img src={abyss} alt="abyss"/>
-                        <div className="char__name">Abyss</div>
-                    </li>
-                </ul>
-                <button className="button button__main button__long">
+                    {errorMessage}
+                    {loadingMessage}
+                    {content}
+                <button 
+                    className="button button__main button__long"
+                    onClick={this.updateCharList}>
                     <div className="inner">load more</div>
                 </button>
             </div>
         )
     }
 }
-
 
 export default CharList;

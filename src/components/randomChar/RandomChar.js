@@ -8,8 +8,6 @@ import ErrorMessage from '../errorMessage/errorMessage';
 
 
 class RandomChar extends Component {
-    
-    timerId
 
     state = {
         char: {},
@@ -20,14 +18,15 @@ class RandomChar extends Component {
     marvelService = new MarvelService();
 
     componentDidMount() {
-        this.updateRandomCharacter()
+        this.updateRandomCharacter();
     }
 
     onError = () => {
-        this.setState({
-            loading: false,
-            error: true
-        });
+        // this.setState({
+        //     loading: false,
+        //     error: true
+        // });
+        this.updateRandomCharacter();//при ошибке с сервера посылаем запрос повторно
     }
 
     onCharLoading = () => {
@@ -43,9 +42,8 @@ class RandomChar extends Component {
 
     updateRandomCharacter = () => {
         this.onCharLoading();
-        const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
         this.marvelService
-            .getCharacter(id)
+            .getCharacter()
             .then(this.onCharLoaded)
             .catch(this.onError);
     }
