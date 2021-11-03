@@ -81,7 +81,7 @@ const View = ({char}) => {
         if (comics.length > 10){
             comics=comics.slice(0, 10);
         }
-        comicsList = comics.map(item =>{
+        comicsList = comics.map((item) =>{
             return (
                 <li className="char__comics-item" key={item}>
                     {item}

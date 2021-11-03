@@ -7,6 +7,7 @@ import ErrorMessage from '../errorMessage/errorMessage';
 
 
 
+
 class RandomChar extends Component {
 
     state = {
@@ -22,18 +23,19 @@ class RandomChar extends Component {
     }
 
     onError = () => {
-        // this.setState({
-        //     loading: false,
-        //     error: true
-        // });
-        this.updateRandomCharacter();//при ошибке с сервера посылаем запрос повторно
+        this.setState({
+            loading: false,
+            error: true
+        });
+        // this.updateRandomCharacter()//при ошибке с сервера посылаем запрос повторно
     }
+
 
     onCharLoading = () => {
         this.setState({
             error: false,
             loading: true
-        }); 
+        });
     }
 
     onCharLoaded = (char) => {
@@ -41,11 +43,13 @@ class RandomChar extends Component {
     }
 
     updateRandomCharacter = () => {
+
         this.onCharLoading();
         this.marvelService
             .getCharacter()
             .then(this.onCharLoaded)
             .catch(this.onError);
+        
     }
 
     render() {

@@ -6,6 +6,8 @@ import CharInfo from "../charInfo/CharInfo";
 import {Component} from "react";
 import decoration from '../../resources/img/vision.png';
 
+import ErrorBoundary from '../errorBoundary/errorBoundary';
+
 export default class App extends Component {
 
     state = {
@@ -23,10 +25,16 @@ export default class App extends Component {
             <div className="app">
                 <AppHeader/>
                 <main>
-                    <RandomChar/>
+                    <ErrorBoundary>
+                        <RandomChar/>
+                    </ErrorBoundary>
                     <div className="char__content">
-                        <CharList selectChar={this.selectChar}/>
-                        <CharInfo id={this.state.selectedCharId}/>
+                        <ErrorBoundary>
+                            <CharList selectChar={this.selectChar}/>
+                        </ErrorBoundary>
+                        <ErrorBoundary>
+                            <CharInfo id={this.state.selectedCharId}/>
+                        </ErrorBoundary>
                     </div>
                     <img className="bg-decoration" src={decoration} alt="vision"/>
                 </main>
