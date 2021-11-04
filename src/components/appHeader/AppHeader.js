@@ -4,15 +4,15 @@ const AppHeader = () => {
     return (
         <header className="app__header">
             <h1 className="app__title">
-                <a href="google.com">
+                <div>
                     <span>Marvel</span> information portal
-                </a>
+                </div>
             </h1>
             <nav className="app__menu">
                 <ul>
-                    <li><a href="google.com">Characters</a></li>
+                    <li><a href="https://www.marvel.com/characters">Characters</a></li>
                     /
-                    <li><a href="google.com">Comics</a></li>
+                    <li><a href="https://www.marvel.com/comics">Comics</a></li>
                 </ul>
             </nav>
         </header>

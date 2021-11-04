@@ -13,7 +13,7 @@ export default class MarvelService {
         return await res.json();
     }
 
-    getAllCharacters = async (amount = 9, offset = Math.random() * 500) => {
+    getAllCharacters = async (offset = Math.random() * 500, amount = 9) => {
         const res = await this.getResource(`${this._apiBase}?limit=${amount}&offset=${offset}&${this._apiKey}`);
         return res.data.results.map(this._transformCharacter);
     } 

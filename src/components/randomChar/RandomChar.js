@@ -13,8 +13,11 @@ class RandomChar extends Component {
     state = {
         char: {},
         loading: true,
-        error: false
+        error: false,
+        _getResourseMaxattempts: 4
     }
+
+
 
     marvelService = new MarvelService();
 
@@ -23,11 +26,18 @@ class RandomChar extends Component {
     }
 
     onError = () => {
-        this.setState({
-            loading: false,
-            error: true
-        });
-        // this.updateRandomCharacter()//при ошибке с сервера посылаем запрос повторно
+        if (this.state._getResourseMaxattempts !== 0){
+            this.setState({
+                _getResourseMaxattempts: this.state._getResourseMaxattempts - 1
+            });
+            this.updateRandomCharacter()//при ошибке с сервера посылаем запрос повторно
+        }
+        else{
+            this.setState({
+                error: true,
+                loading: false
+            });
+        }
     }
 
 
@@ -39,17 +49,19 @@ class RandomChar extends Component {
     }
 
     onCharLoaded = (char) => {
-        this.setState({char, loading: false});
+        this.setState({
+            char,
+            loading: false,
+            _getResourseMaxattempts: 4
+        });
     }
 
     updateRandomCharacter = () => {
-
         this.onCharLoading();
         this.marvelService
             .getCharacter()
             .then(this.onCharLoaded)
             .catch(this.onError);
-        
     }
 
     render() {

@@ -10,7 +10,9 @@ class CharList extends Component {
     state = {
         charList: [],
         loading: true,
-        error: false
+        error: false,
+        newItemLoading: false,
+        offset: 210
     }
 
     marvelService = new MarvelService();
@@ -28,14 +30,15 @@ class CharList extends Component {
 
     onCharListLoading = () => {
         this.setState({
-            error: false,
-            loading: true
+            newItemLoading: true,
+            offset: this.state.offset + 9 
         }); 
     }
 
-    onCharListLoaded = (charList) => {
+    onCharListLoaded = (newCharList) => {
         this.setState({
-            charList: charList,
+            charList: [...this.state.charList, ...newCharList],
+            newItemLoading: false,
             loading: false
         })
     }
@@ -43,7 +46,7 @@ class CharList extends Component {
     updateCharList = () => {
         this.onCharListLoading();
         this.marvelService
-            .getAllCharacters()
+            .getAllCharacters(this.state.offset)
             .then(this.onCharListLoaded)
             .catch(this.onError)
     }
