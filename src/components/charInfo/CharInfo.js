@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 import './charInfo.scss';
 import MarvelService from '../../services/MarvelService';
 import Skeleton from '../skeleton/Skeleton';
@@ -116,4 +117,8 @@ const View = ({char}) => {
                     </ul>
         </>
     )
+}
+
+CharInfo.propTypes = {
+    id: PropTypes.number
 }
