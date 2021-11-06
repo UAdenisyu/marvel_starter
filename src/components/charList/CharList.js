@@ -52,13 +52,29 @@ class CharList extends Component {
             .catch(this.onError)
     }
 
+    itemRefs = [];
+
+    setRef = (ref) => {
+        this.itemRefs.push(ref);
+    }
+
+    itemSetFocus = (id) => {
+        this.itemRefs.forEach(item => item.classList.remove("char__item_selected"));
+        this.itemRefs[id].classList.add("char__item_selected");
+    }
+
     renderItems = (charList) => {
-        const items = charList.map((item) =>{
+        const items = charList.map((item, i) => {
             return (
                 <li
                     className="char__item"
                     key={item.id}
-                    onClick={() => this.props.selectChar(item.id)}>
+                    ref={this.setRef}
+                    
+                    onClick={() => {
+                        this.props.selectChar(item.id);
+                        this.itemSetFocus(i);
+                    }}>
                         <img src={item.thumbnail} alt={item.name}/>
                         <div className="char__name">{item.name}</div>
                 </li>
@@ -73,18 +89,19 @@ class CharList extends Component {
 
 
 
+
     render() {
-        const { charList, loading, error} = this.state;
+        const { charList, loading, error, newItemLoading} = this.state;
         const errorMessage = error ? <ErrorMessage/> : null;
-        const loadingMessage = loading ? <Spinner/> : null;
+        const loadingMessage = newItemLoading ? <Spinner/> : null;
 
         const content = !(loading || error) ? this.renderItems(charList) : null;
-
+        
         return (
             <div className="char__list">
                     {errorMessage}
-                    {loadingMessage}
                     {content}
+                    {loadingMessage}
                 <button 
                     className="button button__main button__long"
                     onClick={this.updateCharList}>

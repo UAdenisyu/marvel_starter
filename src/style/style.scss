@@ -61,6 +61,9 @@ input::-webkit-inner-spin-button {
     padding: 50px 0 50px 0;
     position: relative;
     .bg-decoration {
+        -moz-user-select: none;
+        -khtml-user-select: none;
+        user-select: none;  
         position: absolute;
         right: -174px;
         bottom: -70px;

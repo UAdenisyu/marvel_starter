@@ -22,6 +22,9 @@
         padding: 15px;
         cursor: pointer;
         transition: 0.3s transform;
+        -moz-user-select: none;
+        -khtml-user-select: none;
+        user-select: none;    
         img {
             width: 200px;
             height: 200px;
